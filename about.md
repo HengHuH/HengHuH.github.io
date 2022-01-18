@@ -5,6 +5,6 @@ description: "Hi, I am Heng."
 permalink: /about.html
 ---
 
-Hi, I'am Heng.
+Hi, I'm Heng.
 
 Email: huangxinghuh@163.com
