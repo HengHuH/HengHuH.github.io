@@ -4,7 +4,7 @@ layout: default
 
 {{ content }}
 
------
+----------
 
-Written by {{ page.author }} At {{ page.date }}
-[首页]( {{ site.url }})
+Post by {{ page.author }}, {{ page.date | date: "%-d %B %Y" }}
+[首页]( {{ site.url }} )

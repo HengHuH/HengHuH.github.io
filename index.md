@@ -8,7 +8,7 @@
 {{ post.excerpt }}
 ... [阅读全文]( {{ post.url }} )
 
-Post by: {{ post.author }}, {{ post.date | date: "%-d %B %Y" }}
+Post by {{ post.author }}, {{ post.date | date: "%-d %B %Y" }}
 
 ------------------
 
