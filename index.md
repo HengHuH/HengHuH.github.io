@@ -13,3 +13,5 @@ Post by {{ post.author }}, {{ post.date | date: "%-d %B %Y" }}
 ------------------
 
 {% endfor %}
+
+{{ paginator.page }}
