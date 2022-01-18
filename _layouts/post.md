@@ -5,5 +5,6 @@ layout: default
 {{ content }}
 
 -----
-{{ page.date }} - Written by {{ page.author }} At {{ page.date | date_to_string }}
+
+Written by {{ page.author }} At {{ page.date }}
 [首页]( {{ site.url }})
