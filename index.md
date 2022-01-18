@@ -1,4 +1,8 @@
-赶快写一篇文章吧
+## 目录
+
+{% for post in site.posts %}
+- [ {{ post.title }} ]( {{ post.url }} )
+{% endfor %}
 
 ## Contact me
 
