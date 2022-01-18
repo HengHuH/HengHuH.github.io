@@ -1,7 +1,3 @@
----
-layout: home
----
-
 [About Me]( {{ site.url }}/about.html )
 
 ------------

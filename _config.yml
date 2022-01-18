@@ -5,9 +5,6 @@ google_analytics:
 show_downloads: false
 theme: jekyll-theme-hacker
 email: huangxinghuh@163.com
-url: "http://henghuh.github.io/"
-
-github_username:  HengHuH
 
 gems:
   - jekyll-mentions
