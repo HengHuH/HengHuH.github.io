@@ -6,6 +6,7 @@ show_downloads: false
 theme: jekyll-theme-hacker
 email: huangxinghuh@163.com
 paginate: 10
+paginate_path: "/blog/page:num/"
 
 gems:
   - jekyll-mentions
