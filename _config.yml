@@ -5,6 +5,7 @@ google_analytics:
 show_downloads: false
 theme: jekyll-theme-hacker
 email: huangxinghuh@163.com
+paginate: 10
 
 gems:
   - jekyll-mentions
