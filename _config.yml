@@ -1,8 +1,18 @@
+# Site settings
 title: Let's Code
 description: Heng' Blog
 google_analytics: 
 show_downloads: false
 theme: jekyll-theme-hacker
+email: huangxinghuh@163.com
+url: "http://henghuh.github.io/"
+
+# Sidebar settings
+sidebar: true
+sidebar-about-description: "Awesome Sidebar"
+
+# SNS settings
+github_username:  HengHuH
 
 gems:
   - jekyll-mentions
