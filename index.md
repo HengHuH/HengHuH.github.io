@@ -3,12 +3,12 @@
 ------------
 
 {% for post in site.posts %}
-> {{ post.title }}
+> <big>{{ post.title }}</big>
 
 {{ post.excerpt }}
-... [阅读全文]( {{ post.url }} )
+[阅读全文]( {{ post.url }} )
 
-Post by {{ post.author }}, {{ post.date | date: "%-d %B %Y" }}
+<small>Post by {{ post.author }}, {{ post.date | date: "%-d %B %Y" }}</small>
 
 ------------------
 
