@@ -6,3 +6,5 @@ permalink: /about.html
 ---
 
 Hi, I'am Heng.
+
+Email: huangxinghuh@163.com
