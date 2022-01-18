@@ -7,11 +7,6 @@ theme: jekyll-theme-hacker
 email: huangxinghuh@163.com
 url: "http://henghuh.github.io/"
 
-# Sidebar settings
-sidebar: true
-sidebar-about-description: "Awesome Sidebar"
-
-# SNS settings
 github_username:  HengHuH
 
 gems:
