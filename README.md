@@ -1,3 +1,3 @@
 # HengHuH.github.io
 
-Heng' Blog
+Heng' Home Page
