@@ -16,47 +16,6 @@ from urllib import parse
 root = os.path.dirname(os.path.abspath(__file__))
 root_url = "https://henghuh.github.io"
 
-post_template = """<!DOCTYPE html>
-<html>
-
-<head>
-    <meta content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{post.title}}</title>
-</head>
-
-<body>
-    {{post.content}}
-    <hr>
-    Heng - <a href="https://henghuh.github.io">https://henghuh.github.io</a>
-</body>
-
-</html>
-"""
-
-index_page = """<!DOCTYPE html>
-<html>
-
-<head>
-    <meta content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heng's Home Page</title>
-</head>
-
-<body>
-    <div align="right">
-        <a href="https://github.com/HengHuH">GitHub Page</a>
-    </div>
-    <h2>工作</h2>
-    <h2>Post</h2>
-    {{allposts}}
-    <hr>
-    联系我: huangxinghuh@163.com<br>
-    <font size="-1">最近更新: {{date}}</font-size>
-</body>
-
-</html>"""
-
 
 class Post:
     def __init__(self) -> None:
@@ -112,6 +71,12 @@ class Builder:
     def __init__(self, site) -> None:
         self._site = site
 
+        with open(os.path.join(root, "post_page"), 'r', encoding='utf-8') as f:
+            self.post_page = f.read()
+
+        with open(os.path.join(root, 'index_page'), 'r', encoding="utf-8") as f:
+            self.index_page = f.read()
+
     def build(self):
         alllinks = []
         for post in sorted(self._site.posts, key=lambda x: (x.year, x.month, x.day), reverse=True):
@@ -120,7 +85,7 @@ class Builder:
             os.makedirs(dirname, exist_ok=True)
 
             with open(abspath, "w", encoding="utf-8") as f:
-                posthtml = post_template.replace("{{post.title}}", post.title)
+                posthtml = self.post_page.replace("{{post.title}}", post.title)
                 posthtml = posthtml.replace("{{post.content}}", post.content)
                 f.write(bs(posthtml, 'html.parser').prettify())
 
@@ -128,7 +93,7 @@ class Builder:
             alllinks.append(f"<a href=\"{post.addr}\">{post.title}</a>")
 
         with open(os.path.join(root, 'index.html'), 'w', encoding='utf-8') as f:
-            content = index_page.replace("{{allposts}}", "<br>\n".join(alllinks))
+            content = self.index_page.replace("{{allposts}}", "<br>\n".join(alllinks))
             content = content.replace("{{date}}", str(date.today()))
             f.write(bs(content, 'html.parser').prettify())
 
