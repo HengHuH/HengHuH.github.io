@@ -70,10 +70,10 @@ class Builder:
     def __init__(self, site) -> None:
         self._site = site
 
-        with open(os.path.join(root, "post_page"), 'r', encoding='utf-8') as f:
+        with open(os.path.join(root, "post.page"), 'r', encoding='utf-8') as f:
             self.post_page = f.read()
 
-        with open(os.path.join(root, 'index_page'), 'r', encoding="utf-8") as f:
+        with open(os.path.join(root, 'index.page'), 'r', encoding="utf-8") as f:
             self.index_page = f.read()
 
     def build(self):
