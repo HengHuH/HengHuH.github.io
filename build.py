@@ -111,10 +111,8 @@ class Builder:
         self._site = site
 
     def build(self):
-        # generate posts page
         alllinks = []
-
-        for post in self._site.posts:
+        for post in sorted(self._site.posts, key=lambda x: (x.year, x.month, x.day)):
             abspath = os.path.join(root, post.addr)
             dirname = os.path.dirname(abspath)
             os.makedirs(dirname, exist_ok=True)
@@ -139,13 +137,8 @@ if __name__ == "__main__":
 
     for fname in os.listdir(os.path.join(root, "_posts")):
         fpath = os.path.join(root, "_posts", fname)
-        # print(fpath)
         post = Post()
         post.load(fpath)
-        # print(post.year, post.month, post.day, post.name)
-        # print(post.title)
-        # print(post.content)
-        # print(post.url)
         site.add_post(post)
 
     builder = Builder(site)
