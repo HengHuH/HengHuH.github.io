@@ -8,6 +8,7 @@
 import os
 import yaml
 import markdown
+from bs4 import BeautifulSoup as bs
 from urllib import parse
 
 
@@ -120,14 +121,14 @@ class Builder:
             with open(abspath, "w", encoding="utf-8") as f:
                 posthtml = post_template.replace("{{post.title}}", post.title)
                 posthtml = posthtml.replace("{{post.content}}", post.content)
-                f.write(posthtml)
+                f.write(bs(posthtml, 'html.parser').prettify())
 
             print(f"build post: {post.addr} --- DONE")
             alllinks.append(f"<a href=\"{post.addr}\">{post.name}</a>")
 
         with open(os.path.join(root, 'index.html'), 'w', encoding='utf-8') as f:
             content = index_page.replace("{{allposts}}", "<br>\n".join(alllinks))
-            f.write(content)
+            f.write(bs(content, 'html.parser').prettify())
 
         print("write index page --- DONE.")
 
