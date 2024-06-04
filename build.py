@@ -8,6 +8,7 @@
 import os
 from datetime import date
 import yaml
+import shutil
 from bs4 import BeautifulSoup as bs
 from urllib import parse
 
@@ -96,8 +97,10 @@ class Builder:
             content = self.index_page.replace("{{allposts}}", "<br>\n".join(alllinks))
             content = content.replace("{{date}}", str(date.today()))
             f.write(bs(content, 'html.parser').prettify())
+            print("build index.html --- DONE.")
 
-        print("write index page --- DONE.")
+        if os.path.exists(os.path.join(root, '404.page')):
+            shutil.copyfile(os.path.join(root, '404.page'), os.path.join(outdir, '404.html'))
 
 
 if __name__ == "__main__":
