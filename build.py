@@ -2,13 +2,12 @@
 
 """HengHuH.github.io 的构建脚本。
 
-依赖：python3, yaml, markdown
+依赖：python3, yaml
 """
 
 import os
 from datetime import date
 import yaml
-import markdown
 from bs4 import BeautifulSoup as bs
 from urllib import parse
 
@@ -50,7 +49,7 @@ class Post:
                 idx = fc.find("---")
                 meta = yaml.safe_load(fc[:idx])
                 self.title = meta["title"]
-                self.content = markdown.markdown(fc[idx + 3 :])
+                self.content = str.strip(fc[idx + 3:])
             else:
                 raise ValueError(f"{path} is not a valid post file, missing meta data")
 
