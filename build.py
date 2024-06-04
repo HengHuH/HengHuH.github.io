@@ -13,6 +13,7 @@ from urllib import parse
 
 
 root = os.path.dirname(os.path.abspath(__file__))
+outdir = os.path.join(root, 'build')
 root_url = "https://henghuh.github.io"
 
 
@@ -79,7 +80,7 @@ class Builder:
     def build(self):
         alllinks = []
         for post in sorted(self._site.posts, key=lambda x: (x.year, x.month, x.day), reverse=True):
-            abspath = os.path.join(root, post.addr)
+            abspath = os.path.join(outdir, post.addr)
             dirname = os.path.dirname(abspath)
             os.makedirs(dirname, exist_ok=True)
 
@@ -91,7 +92,7 @@ class Builder:
             print(f"build post: {post.addr} --- DONE")
             alllinks.append(f"<a href=\"{post.addr}\">{post.title}</a>")
 
-        with open(os.path.join(root, 'index.html'), 'w', encoding='utf-8') as f:
+        with open(os.path.join(outdir, 'index.html'), 'w', encoding='utf-8') as f:
             content = self.index_page.replace("{{allposts}}", "<br>\n".join(alllinks))
             content = content.replace("{{date}}", str(date.today()))
             f.write(bs(content, 'html.parser').prettify())
