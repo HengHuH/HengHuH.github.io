@@ -6,6 +6,7 @@
 """
 
 import os
+from datetime import date
 import yaml
 import markdown
 from bs4 import BeautifulSoup as bs
@@ -51,7 +52,7 @@ index_page = """<!DOCTYPE html>
     {{allposts}}
     <hr>
     联系我: huangxinghuh@163.com<br>
-    <font size="-1">最近更新: 2024-3-30</font-size>
+    <font size="-1">最近更新: {{date}}</font-size>
 </body>
 
 </html>"""
@@ -79,7 +80,7 @@ class Post:
         self.month = fns[1]
         self.day = fns[2]
         self.name = " ".join(fns[3:])
-        self.addr = os.path.join(self.year, self.month, self.day, self.name + ".html")
+        self.addr = os.path.join(self.year, self.month, self.name + ".html")
         self.url = parse.urljoin(root_url, self.addr)
 
         with open(path, "r", encoding="utf-8") as f:
@@ -113,7 +114,7 @@ class Builder:
 
     def build(self):
         alllinks = []
-        for post in sorted(self._site.posts, key=lambda x: (x.year, x.month, x.day)):
+        for post in sorted(self._site.posts, key=lambda x: (x.year, x.month, x.day), reverse=True):
             abspath = os.path.join(root, post.addr)
             dirname = os.path.dirname(abspath)
             os.makedirs(dirname, exist_ok=True)
@@ -128,6 +129,7 @@ class Builder:
 
         with open(os.path.join(root, 'index.html'), 'w', encoding='utf-8') as f:
             content = index_page.replace("{{allposts}}", "<br>\n".join(alllinks))
+            content = content.replace("{{date}}", str(date.today()))
             f.write(bs(content, 'html.parser').prettify())
 
         print("write index page --- DONE.")
