@@ -79,7 +79,7 @@ class Post:
         self.year = fns[0]
         self.month = fns[1]
         self.day = fns[2]
-        self.name = " ".join(fns[3:])
+        self.name = "-".join(fns[3:])
         self.addr = os.path.join(self.year, self.month, self.name + ".html")
         self.url = parse.urljoin(root_url, self.addr)
 
@@ -125,7 +125,7 @@ class Builder:
                 f.write(bs(posthtml, 'html.parser').prettify())
 
             print(f"build post: {post.addr} --- DONE")
-            alllinks.append(f"<a href=\"{post.addr}\">{post.name}</a>")
+            alllinks.append(f"<a href=\"{post.addr}\">{post.title}</a>")
 
         with open(os.path.join(root, 'index.html'), 'w', encoding='utf-8') as f:
             content = index_page.replace("{{allposts}}", "<br>\n".join(alllinks))
