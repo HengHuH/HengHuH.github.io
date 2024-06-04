@@ -119,7 +119,7 @@ class Builder:
 
             with open(abspath, "w", encoding="utf-8") as f:
                 posthtml = post_template.replace("{{post.title}}", post.title)
-                posthtml = post_template.replace("{{post.content}}", post.content)
+                posthtml = posthtml.replace("{{post.content}}", post.content)
                 f.write(posthtml)
 
             print(f"build post: {post.addr} --- DONE")
