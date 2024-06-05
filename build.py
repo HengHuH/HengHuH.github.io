@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 
-"""HengHuH.github.io 的构建脚本。
-
-依赖：python3, yaml
-"""
+"""HengHuH.github.io 的构建脚本。"""
 
 import os
 from datetime import date
 import yaml
-import shutil
 from bs4 import BeautifulSoup as bs
 from urllib import parse
 
@@ -102,30 +98,39 @@ class Builder:
         with open(os.path.join(root, "page_template.html"), "r", encoding="utf-8") as f:
             self.page_temp = f.read()
 
-    def build(self):
+    def fillin_content(self, content):
+        content = content.replace("{{date}}", str(date.today()))
+
         alllinks = []
         for post in sorted(
             self._site.posts, key=lambda x: (x.year, x.month, x.day), reverse=True
         ):
+            alllinks.append(f'<a href="{post.addr}">{post.title}</a>')
+
+        content = content.replace("{{site.pages}}", "<br>\n".join(alllinks))
+        return content
+
+    def build(self):
+        os.makedirs(outdir, exist_ok=True)
+
+        for post in self._site.posts:
             abspath = os.path.join(outdir, post.addr)
             dirname = os.path.dirname(abspath)
             os.makedirs(dirname, exist_ok=True)
 
             with open(abspath, "w", encoding="utf-8") as f:
                 posthtml = self.page_temp.replace("{{page.title}}", post.title)
-                posthtml = posthtml.replace("{{page.content}}", post.content)
+                posthtml = posthtml.replace(
+                    "{{page.content}}", self.fillin_content(post.content)
+                )
                 f.write(bs(posthtml, "html.parser").prettify())
 
             print(f"build post: {post.addr} --- DONE")
-            alllinks.append(f'<a href="{post.addr}">{post.title}</a>')
 
         for page in self._site.pages:
             abspath = os.path.join(outdir, page.addr)
             with open(abspath, "w", encoding="utf-8") as f:
-                pagecontent = page.content.replace(
-                    "{{site.pages}}", "<br>\n".join(alllinks)
-                )
-                pagecontent = pagecontent.replace("{{date}}", str(date.today()))
+                pagecontent = self.fillin_content(page.content)
                 pagehtml = self.page_temp.replace("{{page.title}}", page.title)
                 pagehtml = pagehtml.replace("{{page.content}}", pagecontent)
                 f.write(bs(pagehtml, "html.parser").prettify())
