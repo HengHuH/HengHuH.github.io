@@ -8,3 +8,6 @@ title: Heng's Home Page
 <h2>工作</h2>
 <h2>Posts</h2>
 {{site.pages}}
+<hr/>
+<p>联系我：huangxinghuh@163.com</p>
+<font size="-1">更新于: {{date}}</font>

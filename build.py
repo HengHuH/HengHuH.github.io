@@ -120,8 +120,11 @@ class Builder:
 
             with open(abspath, "w", encoding="utf-8") as f:
                 posthtml = self.page_temp.replace("{{page.title}}", post.title)
+                content = self.fillin_content(post.content)
+                content += f"<hr/><font size=\"-1\">更新于: {date.today()}</font><br>\nHeng - <a href=\"https://henghuh.github.io\">https://henghuh.github.io</a>"
+
                 posthtml = posthtml.replace(
-                    "{{page.content}}", self.fillin_content(post.content)
+                    "{{page.content}}", content
                 )
                 f.write(bs(posthtml, "html.parser").prettify())
 
