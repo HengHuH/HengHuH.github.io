@@ -21,6 +21,7 @@ class Page:
         self.url = ""
         self.title = ""
         self.content = ""
+        self.published = True
 
     @staticmethod
     def extract_meta_content(path):
@@ -47,10 +48,12 @@ class Page:
         self.url = parse.urljoin(root_url, self.addr)
         meta, self.content = self.extract_meta_content(path)
         self.title = meta["title"]
+        self.published = meta.get('published', True)
 
 
 class Post(Page):
     def __init__(self) -> None:
+        super(Post, self).__init__()
         self.date = None
 
     def load(self, path):
@@ -63,8 +66,9 @@ class Post(Page):
         self.addr = os.path.join(fns[0], fns[1], self.name + ".html")
         self.url = parse.urljoin(root_url, self.addr)
         meta, self.content = self.extract_meta_content(path)
-        self.date = getattr(meta, "date", "-".join(fns[0:3]))
+        self.date = meta.get('date', "-".join(fns[0:3]))
         self.title = meta["title"]
+        self.published = meta.get('published', True)
 
 
 class Site:
@@ -119,8 +123,7 @@ class Builder:
 
                 posthtml = posthtml.replace("{{page.content}}", content)
                 f.write(bs(posthtml, "html.parser").prettify())
-
-            print(f"build post: {post.addr} --- DONE")
+                print(f"build post: {post.addr} --- DONE")
 
         for page in self._site.pages:
             abspath = os.path.join(outdir, page.addr)
@@ -139,7 +142,8 @@ if __name__ == "__main__":
         fpath = os.path.join(root, "_posts", fname)
         post = Post()
         post.load(fpath)
-        site.add_post(post)
+        if post.published:
+            site.add_post(post)
 
     for fname in os.listdir(root):
         if not fname.endswith(".page"):
@@ -147,7 +151,8 @@ if __name__ == "__main__":
         fpath = os.path.join(root, fname)
         page = Page()
         page.load(fpath)
-        site.add_page(page)
+        if page.published:
+            site.add_page(page)
 
     builder = Builder(site)
     builder.build()
