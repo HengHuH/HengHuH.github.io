@@ -51,9 +51,7 @@ class Page:
 
 class Post(Page):
     def __init__(self) -> None:
-        self.year = "2024"
-        self.month = "01"
-        self.day = "01"
+        self.date = None
 
     def load(self, path):
         assert os.path.exists(path), f"{path} not exists"
@@ -61,13 +59,11 @@ class Post(Page):
         fname, _ = os.path.splitext(basename)
         fns = fname.split("-")
         assert len(fns) >= 4, f"{path} is not a valid post file"
-        self.year = fns[0]
-        self.month = fns[1]
-        self.day = fns[2]
         self.name = "-".join(fns[3:])
-        self.addr = os.path.join(self.year, self.month, self.name + ".html")
+        self.addr = os.path.join(fns[0], fns[1], self.name + ".html")
         self.url = parse.urljoin(root_url, self.addr)
         meta, self.content = self.extract_meta_content(path)
+        self.date = getattr(meta, "date", "-".join(fns[0:3]))
         self.title = meta["title"]
 
 
@@ -102,9 +98,7 @@ class Builder:
         content = content.replace("{{date}}", str(date.today()))
 
         alllinks = []
-        for post in sorted(
-            self._site.posts, key=lambda x: (x.year, x.month, x.day), reverse=True
-        ):
+        for post in sorted(self._site.posts, key=lambda x: (x.date), reverse=True):
             alllinks.append(f'<a href="{post.addr}">{post.title}</a>')
 
         content = content.replace("{{site.pages}}", "<br>\n".join(alllinks))
@@ -121,11 +115,9 @@ class Builder:
             with open(abspath, "w", encoding="utf-8") as f:
                 posthtml = self.page_temp.replace("{{page.title}}", post.title)
                 content = self.fillin_content(post.content)
-                content += f"<hr/><font size=\"-1\">更新于: {date.today()}</font><br>\nHeng - <a href=\"https://henghuh.github.io\">https://henghuh.github.io</a>"
+                content += f'<hr/><font size="-1">发布于 {post.date}</font><br>\nHeng - <a href="https://henghuh.github.io">https://henghuh.github.io</a>'
 
-                posthtml = posthtml.replace(
-                    "{{page.content}}", content
-                )
+                posthtml = posthtml.replace("{{page.content}}", content)
                 f.write(bs(posthtml, "html.parser").prettify())
 
             print(f"build post: {post.addr} --- DONE")
