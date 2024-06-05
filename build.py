@@ -99,14 +99,10 @@ class Builder:
     def __init__(self, site) -> None:
         self._site = site
 
-        with open(os.path.join(root, "post_template.html"), "r", encoding="utf-8") as f:
-            self.post_temp = f.read()
-
         with open(os.path.join(root, "page_template.html"), "r", encoding="utf-8") as f:
             self.page_temp = f.read()
 
     def build(self):
-        # build posts
         alllinks = []
         for post in sorted(
             self._site.posts, key=lambda x: (x.year, x.month, x.day), reverse=True
@@ -116,8 +112,8 @@ class Builder:
             os.makedirs(dirname, exist_ok=True)
 
             with open(abspath, "w", encoding="utf-8") as f:
-                posthtml = self.post_temp.replace("{{post.title}}", post.title)
-                posthtml = posthtml.replace("{{post.content}}", post.content)
+                posthtml = self.page_temp.replace("{{page.title}}", post.title)
+                posthtml = posthtml.replace("{{page.content}}", post.content)
                 f.write(bs(posthtml, "html.parser").prettify())
 
             print(f"build post: {post.addr} --- DONE")
