@@ -10,7 +10,6 @@ from urllib import parse
 
 
 root = os.path.dirname(os.path.abspath(__file__))
-outdir = os.path.join(root, "build")
 root_url = "https://henghuh.github.io"
 
 
@@ -47,7 +46,7 @@ class Page:
         self.addr = self.name + ".html"
         self.url = parse.urljoin(root_url, self.addr)
         meta, self.content = self.extract_meta_content(path)
-        self.title = meta["title"]
+        self.title = meta.get("title", self.name)
         self.published = meta.get('published', True)
 
 
@@ -67,12 +66,13 @@ class Post(Page):
         self.url = parse.urljoin(root_url, self.addr)
         meta, self.content = self.extract_meta_content(path)
         self.date = meta.get('date', "-".join(fns[0:3]))
-        self.title = meta["title"]
+        self.title = meta.get("title", self.name)
         self.published = meta.get('published', True)
 
 
 class Site:
-    def __init__(self) -> None:
+    def __init__(self, root) -> None:
+        self.root = root
         self._posts = set()
         self._pages = set()
 
@@ -109,10 +109,10 @@ class Builder:
         return content
 
     def build(self):
-        os.makedirs(outdir, exist_ok=True)
+        os.makedirs(self._site.root, exist_ok=True)
 
         for post in self._site.posts:
-            abspath = os.path.join(outdir, post.addr)
+            abspath = os.path.join(self._site.root, post.addr)
             dirname = os.path.dirname(abspath)
             os.makedirs(dirname, exist_ok=True)
 
@@ -126,7 +126,7 @@ class Builder:
                 print(f"build post: {post.addr} --- DONE")
 
         for page in self._site.pages:
-            abspath = os.path.join(outdir, page.addr)
+            abspath = os.path.join(self._site.root, page.addr)
             with open(abspath, "w", encoding="utf-8") as f:
                 pagecontent = self.fillin_content(page.content)
                 pagehtml = self.page_temp.replace("{{page.title}}", page.title)
@@ -136,7 +136,7 @@ class Builder:
 
 
 if __name__ == "__main__":
-    site = Site()
+    site = Site(os.path.join(root, "build"))
 
     for fname in os.listdir(os.path.join(root, "_posts")):
         fpath = os.path.join(root, "_posts", fname)
