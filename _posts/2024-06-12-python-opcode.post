@@ -21,4 +21,4 @@ types.CodeType 可以动态创建字节码对象，types.FunctionType 可以动�
 </p>
 <p>有了以上工具，可以把集合中的子函数的 __code__, __globals__, __defaults__, __closure__，以一定规则合并起来，再创建出新的函数对象。也就是完成了函数在字节码层面的合并。</p>
 
-<p><a href="https://www.baidu.com">这里看具体实现</a></p>
+<p><a href="https://github.com/HengHuH/pycode">这里看具体实现</a></p>
